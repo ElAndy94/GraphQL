@@ -2,13 +2,17 @@ import React, { Component } from "react";
 import axios from "axios";
 
 import "./Auth.css";
+import AuthContext from "./../context/auth-context";
 
 class Auth extends Component {
+  state = {
+    isLogin: true
+  };
+
+  static contextType = AuthContext;
+
   constructor(props) {
     super(props);
-    this.state = {
-      isLogin: true
-    };
     this.emailEl = React.createRef();
     this.passwordEl = React.createRef();
   }
@@ -56,6 +60,13 @@ class Auth extends Component {
     axios
       .post("http://localhost:8000/graphql", requestBody)
       .then(res => {
+        if (res.data.data.login.token) {
+          this.context.login(
+            res.data.data.login.token,
+            res.data.data.login.userId,
+            res.data.data.login.tokenExpiration
+          );
+        }
         console.log(res.data);
       })
       .catch(err => {
