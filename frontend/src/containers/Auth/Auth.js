@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 
 import "./Auth.css";
-import AuthContext from "./../context/auth-context";
+import AuthContext from "../../context/auth-context";
 
 class Auth extends Component {
   state = {
@@ -67,7 +67,7 @@ class Auth extends Component {
             res.data.data.login.tokenExpiration
           );
         }
-        console.log(res.data);
+        // console.log(res.data);
       })
       .catch(err => {
         console.log(err);

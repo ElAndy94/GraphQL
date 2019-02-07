@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 
-import Auth from "./containers/Auth";
-import Events from "./containers/Events";
-import Booking from "./containers/Booking";
+import Auth from "./containers/Auth/Auth";
+import Events from "./containers/Events/Events";
+import Booking from "./containers/Booking/Booking";
 import MainNavigation from "./components/Navigation/MainNavigation";
 import AuthContext from "./context/auth-context";
 import "./App.css";

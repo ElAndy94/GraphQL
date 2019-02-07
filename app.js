@@ -30,7 +30,7 @@ app.use('/graphql', graphqlHttp({
 })
 );
 
-mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0-tbpwd.mongodb.net/${process.env.MONGO_DB}?retryWrites=true`)
+mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0-tbpwd.mongodb.net/${process.env.MONGO_DB}?retryWrites=true`, { useNewUrlParser: true })
   .then(() => {
     app.listen(8000);
   })
