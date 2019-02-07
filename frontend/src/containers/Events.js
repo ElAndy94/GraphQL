@@ -8,7 +8,8 @@ import "./Events.css";
 
 class Events extends Component {
   state = {
-    creating: false
+    creating: false,
+    events: []
   };
 
   static contextType = AuthContext;
@@ -20,6 +21,10 @@ class Events extends Component {
     this.priceElRef = React.createRef();
     this.dateElRef = React.createRef();
     this.descriptionElRef = React.createRef();
+  }
+
+  componentDidMount() {
+    this.fetchEvents();
   }
 
   startCreateEventHandler = () => {
@@ -71,7 +76,8 @@ class Events extends Component {
     axios
       .post("http://localhost:8000/graphql", requestBody, config)
       .then(res => {
-        console.log(res.data);
+        // console.log(res.data.data);
+        this.fetchEvents();
       })
       .catch(err => {
         console.log(err);
@@ -82,7 +88,41 @@ class Events extends Component {
     this.setState({ creating: false });
   };
 
+  fetchEvents() {
+    const requestBody = {
+      query: `
+        query {
+          events {
+            _id
+            title
+            description
+            date
+            price
+            creator {
+              _id
+              email
+            }
+          }
+        }
+      `
+    };
+
+    axios
+      .post("http://localhost:8000/graphql", requestBody)
+      .then(res => {
+        const events = res.data.data.events;
+        this.setState({events: events});
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   render() {
+    const eventList = this.state.events.map(event => {
+      return <li key={event._id} className="events__list-item">{event.title}</li>;
+    });
+
     return (
       <React.Fragment>
         {this.state.creating && <Backdrop />}
@@ -127,7 +167,7 @@ class Events extends Component {
           </div>
         )}
         <ul className="events__list">
-          <li className="events__list-item">Test</li>
+          {eventList}
         </ul>
       </React.Fragment>
     );
