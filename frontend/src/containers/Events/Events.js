@@ -13,8 +13,9 @@ class Events extends Component {
     creating: false,
     events: [],
     isLoading: false,
-    selectedEvent: null
+    selectedEvent: null,
   };
+  isActive = true;
 
   static contextType = AuthContext;
 
@@ -70,7 +71,6 @@ class Events extends Component {
     };
 
     const token = this.context.token;
-
     const config = { headers: { Authorization: "bearer " + token } };
 
     axios
@@ -124,11 +124,15 @@ class Events extends Component {
       .post("http://localhost:8000/graphql", requestBody)
       .then(res => {
         const events = res.data.data.events;
-        this.setState({ events: events, isLoading: false });
+        if (this.isActive) {
+          this.setState({ events: events, isLoading: false });
+        }
       })
       .catch(err => {
         console.log(err);
-        this.setState({ isLoading: false });
+        if (this.isActive) {
+          this.setState({ isLoading: false });
+        }
       });
   }
 
@@ -139,7 +143,40 @@ class Events extends Component {
     });
   };
 
-  bookEventHandler = () => {};
+  bookEventHandler = () => {
+    if (!this.context.token) {
+      this.setState({ selectedEvent: null });
+      return;
+    }
+    const requestBody = {
+      query: `
+        mutation {
+          bookEvent(eventId: "${this.state.selectedEvent._id}") {
+            _id
+            createdAt
+            updatedAt
+          }
+        }
+      `
+    };
+
+    const token = this.context.token;
+    const config = { headers: { Authorization: "bearer " + token } };
+
+    axios
+      .post("http://localhost:8000/graphql", requestBody, config)
+      .then(res => {
+        console.log(res.data);
+        this.setState({ selectedEvent: null });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  componentWillUnmount() {
+    this.isActive = false;
+  }
 
   render() {
     return (
@@ -185,7 +222,7 @@ class Events extends Component {
             canConfirm
             onCancel={this.modalCancelHandler}
             onConfirm={this.bookEventHandler}
-            confirmText="Book"
+            confirmText={this.context.token ? "Book" : "Confirm"}
           >
             <h1>{this.state.selectedEvent.title}</h1>
             <h2>
