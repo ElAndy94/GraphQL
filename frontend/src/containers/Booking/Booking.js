@@ -54,13 +54,16 @@ class Booking extends Component {
     this.setState({ isLoading: true });
     const requestBody = {
       query: `
-        mutation {
-          cancelBooking(bookingId: "${bookingId}") {
+        mutation CancelBooking($id: ID!) {
+          cancelBooking(bookingId: $id) {
             _id
             title
           }
         }
-      `
+      `,
+      variables: {
+        id: bookingId
+      }
     };
 
     const token = this.context.token;
@@ -88,7 +91,10 @@ class Booking extends Component {
         {this.state.isLoading ? (
           <Spinner />
         ) : (
-          <BookingList bookings={this.state.bookings} onDelete={this.deleteBookingHandler} />
+          <BookingList
+            bookings={this.state.bookings}
+            onDelete={this.deleteBookingHandler}
+          />
         )}
       </React.Fragment>
     );
