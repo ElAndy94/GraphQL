@@ -153,9 +153,9 @@ class Events extends Component {
       });
   };
 
-  componentWillUnmount() {
-    this.isActive = false;
-  }
+  // componentWillUnmount() {
+  //   this.isActive = false;
+  // }
 
   render() {
     return (

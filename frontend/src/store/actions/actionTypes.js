@@ -1,3 +1,7 @@
 export const FETCH_EVENTS_START = 'FETCH_EVENTS_START';
 export const FETCH_EVENTS_SUCCESS = 'FETCH_EVENTS_SUCCESS';
 export const FETCH_EVENTS_FAIL = 'FETCH_EVENTS_FAIL';
+
+export const AUTH_START = 'AUTH_START';
+export const AUTH_SUCCESS = 'AUTH_SUCCESS';
+export const AUTH_FAIL = 'AUTH_FAIL';

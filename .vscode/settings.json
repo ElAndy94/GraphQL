@@ -1,3 +1,6 @@
 {
-  "editor.tabSize": 2
+  "editor.tabSize": 2,
+  "workbench.fontAliasing": "auto",
+  "editor.fontFamily": "Dank Mono, 'Courier New', monospace",
+  "editor.fontSize": 13
 }

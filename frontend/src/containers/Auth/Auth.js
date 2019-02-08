@@ -65,6 +65,8 @@ class Auth extends Component {
       };
     }
 
+    this.props.onAuth(requestBody);
+
     axios
       .post("http://localhost:8000/graphql", requestBody)
       .then(res => {
@@ -75,7 +77,6 @@ class Auth extends Component {
             res.data.data.login.tokenExpiration
           );
         }
-        // console.log(res.data);
       })
       .catch(err => {
         console.log(err);
