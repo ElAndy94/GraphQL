@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { connect } from 'react-redux';
+// import PropTypes from 'prop-types';
 
+import * as actions from '../../store/actions/index';
 import Modal from "../../components/Modal/Modal";
 import Backdrop from "../../components/Backdrop/Backdrop";
 import AuthContext from "../../context/auth-context";
@@ -29,7 +32,10 @@ class Events extends Component {
   }
 
   componentDidMount() {
-    this.fetchEvents();
+    this.props.fetchEvents();
+    setTimeout(() => {
+      this.setState({ events: this.props.events });
+    }, 200);
   }
 
   startCreateEventHandler = () => {
@@ -105,42 +111,6 @@ class Events extends Component {
   modalCancelHandler = () => {
     this.setState({ creating: false, selectedEvent: null });
   };
-
-  fetchEvents() {
-    this.setState({ isLoading: true });
-    const requestBody = {
-      query: `
-        query {
-          events {
-            _id
-            title
-            description
-            date
-            price
-            creator {
-              _id
-              email
-            }
-          }
-        }
-      `
-    };
-
-    axios
-      .post("http://localhost:8000/graphql", requestBody)
-      .then(res => {
-        const events = res.data.data.events;
-        if (this.isActive) {
-          this.setState({ events: events, isLoading: false });
-        }
-      })
-      .catch(err => {
-        console.log(err);
-        if (this.isActive) {
-          this.setState({ isLoading: false });
-        }
-      });
-  }
 
   showDetailHandler = eventId => {
     this.setState(prevState => {
@@ -263,4 +233,19 @@ class Events extends Component {
   }
 }
 
-export default Events;
+// Events.propTypes = {
+//   events: PropTypes.array.isRequired,
+//   events: PropTypes.object
+// };
+
+const mapStateToProps = state => ({
+  events: state.events.events
+});
+
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchEvents: () => dispatch( actions.fetchEvents() ),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Events);

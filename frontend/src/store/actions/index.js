@@ -1,0 +1,3 @@
+export {
+  fetchEvents,
+} from './event';
