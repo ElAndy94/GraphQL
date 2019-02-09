@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import axios from "axios";
+import { connect } from 'react-redux';
 
+import * as actions from '../../store/actions/index';
 import "./Auth.css";
 import AuthContext from "../../context/auth-context";
 
@@ -67,20 +68,20 @@ class Auth extends Component {
 
     this.props.onAuth(requestBody);
 
-    axios
-      .post("http://localhost:8000/graphql", requestBody)
-      .then(res => {
-        if (res.data.data.login.token) {
-          this.context.login(
-            res.data.data.login.token,
-            res.data.data.login.userId,
-            res.data.data.login.tokenExpiration
-          );
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    // axios
+    //   .post("http://localhost:8000/graphql", requestBody)
+    //   .then(res => {
+    //     if (res.data.data.login.token) {
+    //       this.context.login(
+    //         res.data.data.login.token,
+    //         res.data.data.login.userId,
+    //         res.data.data.login.tokenExpiration
+    //       );
+    //     }
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //   });
   };
 
   render() {
@@ -105,4 +106,14 @@ class Auth extends Component {
   }
 }
 
-export default Auth;
+const mapStateToProps = state => ({
+  events: state.events.events
+});
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onAuth: (requestBody) => dispatch( actions.auth(requestBody) ),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);

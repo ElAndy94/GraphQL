@@ -5,7 +5,7 @@ import Auth from "./containers/Auth/Auth";
 import Events from "./containers/Events/Events";
 import Booking from "./containers/Booking/Booking";
 import MainNavigation from "./components/Navigation/MainNavigation";
-import AuthContext from "./context/auth-context";
+// import AuthContext from "./context/auth-context";
 import "./App.css";
 
 class App extends Component {
@@ -14,7 +14,7 @@ class App extends Component {
     userId: null
   };
 
-  login = (token, userId, tokenExpiration) => {
+  handleAuthComplete = (token, userId, tokenExpiration) => {
     this.setState({ token: token, userId: userId });
   };
 
@@ -26,14 +26,14 @@ class App extends Component {
     return (
       <BrowserRouter>
         <React.Fragment>
-          <AuthContext.Provider
+          {/* <AuthContext.Provider
             value={{
               token: this.state.token,
               userId: this.state.userId,
               login: this.login,
               logout: this.logout
             }}
-          >
+          > */}
             <MainNavigation />
             <main className="main-content">
               <Switch>
@@ -41,19 +41,20 @@ class App extends Component {
                 {this.state.token && (
                   <Redirect from="/auth" to="/events" exact />
                 )}
-                {!this.state.token && <Route path="/auth" component={Auth} />}
+                 
+                {!this.state.token && <Route path="/auth" render={(props) => <Auth {...props} onAuthComplete={this.handleAuthComplete} />} />}
                 <Route path="/events" component={Events} />
                 {this.state.token && (
                   <Route path="/bookings" component={Booking} />
                 )}
-                {!this.state.token && <Redirect to="/auth" exact />}
+                {!this.state.token && <Route path="/auth" render={(props) => <Auth {...props} onAuthComplete={this.handleAuthComplete} />} />}
               </Switch>
             </main>
-          </AuthContext.Provider>
+          {/* </AuthContext.Provider> */}
         </React.Fragment>
       </BrowserRouter>
     );
   }
-}
+};
 
 export default App;

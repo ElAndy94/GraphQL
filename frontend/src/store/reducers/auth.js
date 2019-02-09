@@ -8,19 +8,14 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.FETCH_EVENTS_START:
-      return {
-        ...state,
-        loading: true
-      };
-    case actionTypes.FETCH_EVENTS_SUCCESS:
+    case actionTypes.AUTH_SUCCESS:
       return {
         ...state,
         isLoggedIn: true,
         token: action.token,
         loading: false
       };
-    case actionTypes.FETCH_EVENTS_FAIL:
+    case actionTypes.AUTH_FAIL:
       return {
         ...state,
       };

@@ -24,10 +24,12 @@ export const auth = requestBody => {
       .post("http://localhost:8000/graphql", requestBody)
       .then(res => {
         if (res.data.data.login.token) {
-          this.authSuccess(
-            res.data.data.login.userId,
-            res.data.data.login.token,
-            res.data.data.login.tokenExpiration
+          dispatch(
+            authSuccess(
+              res.data.data.login.userId,
+              res.data.data.login.token,
+              res.data.data.login.tokenExpiration
+            )
           );
         }
       })
