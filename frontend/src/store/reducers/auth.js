@@ -3,7 +3,9 @@ import * as actionTypes from "../actions/actionTypes";
 const initialState = {
   isLoggedIn: false,
   token: null,
-  loading: false
+  userId: null,
+  tokenExpiration: null,
+  // loading: false
 };
 
 const reducer = (state = initialState, action) => {
@@ -12,8 +14,10 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         isLoggedIn: true,
+        userId: action.userId,
         token: action.token,
-        loading: false
+        tokenExpiration: action.tokenExpiration
+        // loading: false
       };
     case actionTypes.AUTH_FAIL:
       return {

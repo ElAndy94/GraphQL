@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 
 import * as actions from '../../store/actions/index';
 import "./Auth.css";
-import AuthContext from "../../context/auth-context";
+// import AuthContext from "../../context/auth-context";
 
 class Auth extends Component {
   state = {
     isLogin: true
   };
 
-  static contextType = AuthContext;
+  // static contextType = AuthContext;
 
   constructor(props) {
     super(props);
@@ -67,6 +67,7 @@ class Auth extends Component {
     }
 
     this.props.onAuth(requestBody);
+    this.props.onAuthComplete();
 
     // axios
     //   .post("http://localhost:8000/graphql", requestBody)
@@ -106,14 +107,10 @@ class Auth extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  events: state.events.events
-});
-
 const mapDispatchToProps = dispatch => {
   return {
     onAuth: (requestBody) => dispatch( actions.auth(requestBody) ),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Auth);
+export default connect(null, mapDispatchToProps)(Auth);

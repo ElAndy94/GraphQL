@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
+import { connect } from 'react-redux';
 
 import Auth from "./containers/Auth/Auth";
 import Events from "./containers/Events/Events";
@@ -14,8 +15,9 @@ class App extends Component {
     userId: null
   };
 
-  handleAuthComplete = (token, userId, tokenExpiration) => {
-    this.setState({ token: token, userId: userId });
+  handleAuthComplete = () => {
+    // console.log('hello' , this.props.userId, this.props.token);
+    this.setState({ userId: this.props.userId, token: this.props.token });
   };
 
   logout = () => {
@@ -34,28 +36,47 @@ class App extends Component {
               logout: this.logout
             }}
           > */}
-            <MainNavigation />
-            <main className="main-content">
-              <Switch>
-                {this.state.token && <Redirect from="/" to="/events" exact />}
-                {this.state.token && (
-                  <Redirect from="/auth" to="/events" exact />
-                )}
-                 
-                {!this.state.token && <Route path="/auth" render={(props) => <Auth {...props} onAuthComplete={this.handleAuthComplete} />} />}
-                {!this.state.token && <Redirect from="/events" to="/auth" exact />}
-                <Route path="/events" component={Events} />
-                {this.state.token && (
-                  <Route path="/bookings" component={Booking} />
-                )}
-                {!this.state.token && <Route path="/auth" render={(props) => <Auth {...props} onAuthComplete={this.handleAuthComplete} />} />}
-              </Switch>
-            </main>
+          <MainNavigation />
+          <main className="main-content">
+            <Switch>
+              {this.state.token && <Redirect from="/" to="/events" exact />}
+              {this.state.token && <Redirect from="/auth" to="/events" exact />}
+
+              {!this.state.token && (
+                <Route
+                  path="/auth"
+                  render={props => (
+                    <Auth {...props} onAuthComplete={this.handleAuthComplete} />
+                  )}
+                />
+              )}
+              {!this.state.token && (
+                <Redirect from="/events" to="/events" exact />
+              )}
+              {this.state.token &&
+                (<Route path="/events" component={Events} />,
+                <Route path="/bookings" component={Booking} />)}
+              {!this.state.token && (
+                <Route
+                  path="/auth"
+                  render={props => (
+                    <Auth {...props} onAuthComplete={this.handleAuthComplete} />
+                  )}
+                />
+              )}
+            </Switch>
+          </main>
           {/* </AuthContext.Provider> */}
         </React.Fragment>
       </BrowserRouter>
     );
   }
-};
+}
 
-export default App;
+const mapStateToProps = state => ({
+  userId: state.auth.userId,
+  token: state.auth.token,
+  tokenExpiration: state.auth.tokenExpiration,
+});
+
+export default connect(mapStateToProps, null)(App);
