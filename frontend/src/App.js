@@ -43,6 +43,7 @@ class App extends Component {
                 )}
                  
                 {!this.state.token && <Route path="/auth" render={(props) => <Auth {...props} onAuthComplete={this.handleAuthComplete} />} />}
+                {!this.state.token && <Redirect from="/events" to="/auth" exact />}
                 <Route path="/events" component={Events} />
                 {this.state.token && (
                   <Route path="/bookings" component={Booking} />
