@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import * as actions from '../../store/actions/index';
 import Modal from "../../components/Modal/Modal";
 import Backdrop from "../../components/Backdrop/Backdrop";
-import AuthContext from "../../context/auth-context";
 import EventList from "../../components/Events/EventList/EventList";
 import Spinner from "../../components/Spinner/Spinner";
 import "./Events.css";
@@ -20,8 +19,6 @@ class Events extends Component {
   };
   isActive = true;
 
-  static contextType = AuthContext;
-
   constructor(props) {
     super(props);
 
@@ -30,12 +27,12 @@ class Events extends Component {
     this.dateElRef = React.createRef();
     this.descriptionElRef = React.createRef();
   }
-
+  
   componentDidMount() {
     this.props.fetchEvents();
     setTimeout(() => {
       this.setState({ events: this.props.events });
-    }, 200);
+    }, 350);
   }
 
   startCreateEventHandler = () => {

@@ -6,77 +6,68 @@ import Auth from "./containers/Auth/Auth";
 import Events from "./containers/Events/Events";
 import Booking from "./containers/Booking/Booking";
 import MainNavigation from "./components/Navigation/MainNavigation";
-// import AuthContext from "./context/auth-context";
+import * as actions from './store/actions/index';
 import "./App.css";
 
 class App extends Component {
-  state = {
-    token: null,
-    userId: null
-  };
+  state = {};
 
-  handleAuthComplete = () => {
-    // console.log('hello' , this.props.userId, this.props.token);
-    this.setState({ userId: this.props.userId, token: this.props.token });
-  };
+  // handleAuthComplete = () => {
+  //   setTimeout(() => {
+  //     this.setState({ events: this.props.events });
+  //     this.setState({ userId: this.props.userId, token: this.props.token });
+  //   }, 500);
+  // };
 
-  logout = () => {
-    this.setState({ token: null, userId: null });
-  };
+  // logout = () => {
+  //   this.setState({ token: null, userId: null });
+  // };
+
+  componentDidMount() {
+    this.props.onTryAutoSingup();
+  }
 
   render() {
     return (
       <BrowserRouter>
         <React.Fragment>
-          {/* <AuthContext.Provider
-            value={{
-              token: this.state.token,
-              userId: this.state.userId,
-              login: this.login,
-              logout: this.logout
-            }}
-          > */}
           <MainNavigation />
           <main className="main-content">
-            <Switch>
-              {this.state.token && <Redirect from="/" to="/events" exact />}
-              {this.state.token && <Redirect from="/auth" to="/events" exact />}
-
-              {!this.state.token && (
-                <Route
-                  path="/auth"
-                  render={props => (
-                    <Auth {...props} onAuthComplete={this.handleAuthComplete} />
-                  )}
-                />
-              )}
-              {!this.state.token && (
-                <Redirect from="/events" to="/events" exact />
-              )}
-              {this.state.token &&
-                (<Route path="/events" component={Events} />,
-                <Route path="/bookings" component={Booking} />)}
-              {!this.state.token && (
-                <Route
-                  path="/auth"
-                  render={props => (
-                    <Auth {...props} onAuthComplete={this.handleAuthComplete} />
-                  )}
-                />
-              )}
-            </Switch>
-          </main>
-          {/* </AuthContext.Provider> */}
+              <Switch>
+                {this.props.isAuthenticated && <Redirect from="/" to="/events" exact />}
+                {this.props.isAuthenticated && (
+                  <Redirect from="/auth" to="/events" exact />
+                )}
+                {!this.props.isAuthenticated && <Route path="/auth" component={Auth} />}
+                <Route path="/events" component={Events} />
+                {this.props.isAuthenticated && (
+                  <Route path="/bookings" component={Booking} />
+                )}
+                {!this.props.isAuthenticated && <Redirect to="/auth" exact />}
+              </Switch>
+            </main>
         </React.Fragment>
       </BrowserRouter>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  userId: state.auth.userId,
-  token: state.auth.token,
-  tokenExpiration: state.auth.tokenExpiration,
-});
+// const mapStateToProps = state => ({
+//   userId: state.auth.userId,
+//   token: state.auth.token,
+//   tokenExpiration: state.auth.tokenExpiration,
+// });
 
-export default connect(mapStateToProps, null)(App);
+const mapStateToProps = state => {
+  return {
+    isAuthenticated: state.auth.token !== null
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onTryAutoSingup: () => dispatch(actions.authCheckState())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

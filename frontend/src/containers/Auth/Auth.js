@@ -67,7 +67,6 @@ class Auth extends Component {
     }
 
     this.props.onAuth(requestBody);
-    this.props.onAuthComplete();
 
     // axios
     //   .post("http://localhost:8000/graphql", requestBody)
