@@ -51,7 +51,7 @@ module.exports = {
     return {
       userId: user.id,
       token: token,
-      tokenExpiration: 1
+      tokenExpiration: 3600
     };
   }
 };

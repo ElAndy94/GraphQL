@@ -54,8 +54,7 @@ export const auth = requestBody => {
               res.data.data.login.token
             )
           );
-          dispatch(checkAuthTimeout(60000)); // needs fixing
-          // dispatch(checkAuthTimeout(res.data.data.login.tokenExpiration));
+          dispatch(checkAuthTimeout(res.data.data.login.tokenExpiration));
         }
       })
       .catch(err => {
@@ -69,15 +68,12 @@ export const authCheckState = () => {
   return dispatch => {
     const token = localStorage.getItem("token");
     if (!token) {
-      console.log("line 47 logout");
       dispatch(logout());
     } else {
       const expirationDate = new Date(localStorage.getItem("expirationDate"));
       if (expirationDate <= new Date()) {
-        console.log("line 51 logout");
-        // dispatch(logout());
+        dispatch(logout());
       } else {
-        console.log('auth check state bottom');
         const userId = localStorage.getItem("userId");
         dispatch(authSuccess(token, userId));
         dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000));
