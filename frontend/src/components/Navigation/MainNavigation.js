@@ -13,15 +13,13 @@ const mainNavigation = props => (
     <nav className="main-navigation__items">
       <ul>
         {!props.isAuthenticated && (
-          <React.Fragment>
-            <li>
-              <NavLink to="/auth">Login</NavLink>
-            </li>
-            <li>
-              <NavLink to="/events">Events</NavLink>
-            </li>
-          </React.Fragment>
+          <li>
+            <NavLink to="/auth">Login</NavLink>
+          </li>
         )}
+        <li>
+          <NavLink to="/events">Events</NavLink>
+        </li>
         {props.isAuthenticated && (
           <React.Fragment>
             <li>

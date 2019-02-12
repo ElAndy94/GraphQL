@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
 import Spinner from "../../components/Spinner/Spinner";
 import BookingList from "../../components/Bookings/BookingList/BookingList";
@@ -30,6 +30,7 @@ class Booking extends Component {
               _id
               title
               date
+              price
             }
           }
         }
@@ -91,6 +92,7 @@ class Booking extends Component {
       this.setState({ outputType: "list" });
     } else {
       this.setState({ outputType: "chart" });
+      console.log(this.state.bookings);
     }
   };
 
@@ -118,7 +120,7 @@ class Booking extends Component {
     }
     return <React.Fragment>{content}</React.Fragment>;
   }
-};
+}
 
 const mapStateToProps = state => {
   return {
@@ -126,4 +128,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, null)(Booking);
+export default connect(
+  mapStateToProps,
+  null
+)(Booking);
