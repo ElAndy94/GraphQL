@@ -2,6 +2,8 @@ import axios from "axios";
 
 import * as actionTypes from "./actionTypes";
 
+let userBookings;
+
 export const fetchStart = () => {
   return {
     type: actionTypes.FETCH_BOOKINGS_START
@@ -9,6 +11,8 @@ export const fetchStart = () => {
 };
 
 export const getBookingsSuccess = bookings => {
+  userBookings = bookings;
+  console.log(userBookings);
   return {
     type: actionTypes.FETCH_BOOKINGS_SUCCESS,
     bookings: bookings
@@ -22,7 +26,7 @@ export const fetchBookingsFail = error => {
   };
 };
 
-export const fetchBookings = (config) => {
+export const fetchBookings = config => {
   return dispatch => {
     dispatch(fetchStart());
     const requestBody = {
@@ -52,9 +56,50 @@ export const fetchBookings = (config) => {
         console.log(err);
         dispatch(fetchBookingsFail(err));
       });
-  }
+  };
 };
 
-export const deleteBooking = () => {
+export const deleteBookingSuccess = updatedBooking => {
+  return {
+    type: actionTypes.DELETE_BOOKING_SUCCESS,
+    bookings: updatedBooking
+  };
+};
 
+export const deleteBookingFail = error => {
+  return {
+    type: actionTypes.DELETE_BOOKING_FAIL,
+    error: error
+  };
+};
+
+export const deleteBooking = (config, bookingId) => {
+  return dispatch => {
+    const requestBody = {
+      query: `
+        mutation CancelBooking($id: ID!) {
+          cancelBooking(bookingId: $id) {
+            _id
+            title
+          }
+        }
+      `,
+      variables: {
+        id: bookingId
+      }
+    };
+
+    axios
+      .post("http://localhost:8000/graphql", requestBody, config)
+      .then(res => {
+        const updatedBooking = userBookings.filter(booking => {
+          return booking._id !== bookingId;
+        });
+        dispatch(deleteBookingSuccess(updatedBooking));
+      })
+      .catch(err => {
+        console.log(err);
+        dispatch(deleteBookingFail(err));
+      });
+  };
 };

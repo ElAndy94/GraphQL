@@ -230,11 +230,6 @@ class Events extends Component {
   }
 }
 
-// Events.propTypes = {
-//   events: PropTypes.array.isRequired,
-//   events: PropTypes.object
-// };
-
 const mapStateToProps = state => ({
   events: state.events.events
 });

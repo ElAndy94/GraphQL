@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import axios from "axios";
 import { connect } from "react-redux";
 
 import Spinner from "../../components/Spinner/Spinner";
@@ -10,8 +9,6 @@ import * as actions from "../../store/actions/index";
 
 class Booking extends Component {
   state = {
-    isLoading: false,
-    // bookings: [],
     outputType: "list"
   };
 
@@ -19,44 +16,13 @@ class Booking extends Component {
     const token = this.props.token;
     const config = { headers: { Authorization: "bearer " + token } };
     this.props.onfetchBookings(config);
-    // this.fetchBookings();
   }
 
-  // fetchBookings = () => {};
-
   deleteBookingHandler = bookingId => {
-    this.setState({ isLoading: true });
-    const requestBody = {
-      query: `
-        mutation CancelBooking($id: ID!) {
-          cancelBooking(bookingId: $id) {
-            _id
-            title
-          }
-        }
-      `,
-      variables: {
-        id: bookingId
-      }
-    };
-
+    // this.setState({ isLoading: true });
     const token = this.props.token;
     const config = { headers: { Authorization: "bearer " + token } };
-
-    axios
-      .post("http://localhost:8000/graphql", requestBody, config)
-      .then(res => {
-        this.setState(prevState => {
-          const updatedBooking = prevState.bookings.filter(booking => {
-            return booking._id !== bookingId;
-          });
-          return { bookings: updatedBooking, isLoading: false };
-        });
-      })
-      .catch(err => {
-        console.log(err);
-        this.setState({ isLoading: false });
-      });
+    this.props.onDeleteBooking(config, bookingId);
   };
 
   changeOutputTypeHandler = outputType => {
@@ -69,7 +35,7 @@ class Booking extends Component {
 
   render() {
     let content = <Spinner />;
-    if (!this.state.isLoading) {
+    if (!this.props.isLoading) {
       content = (
         <React.Fragment>
           <BookingControls
@@ -96,14 +62,15 @@ class Booking extends Component {
 const mapStateToProps = state => {
   return {
     token: state.auth.token,
-    bookings: state.booking.bookings
+    bookings: state.booking.bookings,
+    isLoading: state.booking.loading
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     onfetchBookings: config => dispatch(actions.fetchBookings(config)),
-    onDeleteBooking: () => dispatch(actions.deleteBooking())
+    onDeleteBooking: (config, bookingId) => dispatch(actions.deleteBooking(config, bookingId))
   };
 };
 

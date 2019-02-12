@@ -23,6 +23,17 @@ const reducer = (state = initialState, action) => {
         ...state,
         loading: false
       };
+    case actionTypes.DELETE_BOOKING_SUCCESS:
+      return {
+        ...state,
+        bookings: action.bookings,
+        loading: false
+      };
+    case actionTypes.DELETE_BOOKING_FAIL:
+      return {
+        ...state,
+        loading: false
+      };
     default:
       return state;
   }
