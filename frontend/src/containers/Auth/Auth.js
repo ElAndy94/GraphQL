@@ -3,14 +3,11 @@ import { connect } from 'react-redux';
 
 import * as actions from '../../store/actions/index';
 import "./Auth.css";
-// import AuthContext from "../../context/auth-context";
 
 class Auth extends Component {
   state = {
     isLogin: true
   };
-
-  // static contextType = AuthContext;
 
   constructor(props) {
     super(props);

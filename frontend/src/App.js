@@ -10,18 +10,6 @@ import * as actions from './store/actions/index';
 import "./App.css";
 
 class App extends Component {
-  state = {};
-
-  // handleAuthComplete = () => {
-  //   setTimeout(() => {
-  //     this.setState({ events: this.props.events });
-  //     this.setState({ userId: this.props.userId, token: this.props.token });
-  //   }, 500);
-  // };
-
-  // logout = () => {
-  //   this.setState({ token: null, userId: null });
-  // };
 
   componentDidMount() {
     this.props.onTryAutoSingup();
