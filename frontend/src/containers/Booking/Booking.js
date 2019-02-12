@@ -6,51 +6,23 @@ import Spinner from "../../components/Spinner/Spinner";
 import BookingList from "../../components/Bookings/BookingList/BookingList";
 import BookingsChart from "../../components/Bookings/BookingsChart/BookingsChart";
 import BookingControls from "../../components/Bookings/BookingControls/BookingControls";
+import * as actions from "../../store/actions/index";
 
 class Booking extends Component {
   state = {
     isLoading: false,
-    bookings: [],
+    // bookings: [],
     outputType: "list"
   };
 
   componentDidMount() {
-    this.fetchBookings();
-  }
-
-  fetchBookings = () => {
-    this.setState({ isLoading: true });
-    const requestBody = {
-      query: `
-        query {
-          bookings {
-            _id
-            createdAt
-            event {
-              _id
-              title
-              date
-              price
-            }
-          }
-        }
-      `
-    };
-
     const token = this.props.token;
     const config = { headers: { Authorization: "bearer " + token } };
+    this.props.onfetchBookings(config);
+    // this.fetchBookings();
+  }
 
-    axios
-      .post("http://localhost:8000/graphql", requestBody, config)
-      .then(res => {
-        const bookings = res.data.data.bookings;
-        this.setState({ bookings: bookings, isLoading: false });
-      })
-      .catch(err => {
-        console.log(err);
-        this.setState({ isLoading: false });
-      });
-  };
+  // fetchBookings = () => {};
 
   deleteBookingHandler = bookingId => {
     this.setState({ isLoading: true });
@@ -92,7 +64,6 @@ class Booking extends Component {
       this.setState({ outputType: "list" });
     } else {
       this.setState({ outputType: "chart" });
-      console.log(this.state.bookings);
     }
   };
 
@@ -108,11 +79,11 @@ class Booking extends Component {
           <div>
             {this.state.outputType === "list" ? (
               <BookingList
-                bookings={this.state.bookings}
+                bookings={this.props.bookings}
                 onDelete={this.deleteBookingHandler}
               />
             ) : (
-              <BookingsChart bookings={this.state.bookings} />
+              <BookingsChart bookings={this.props.bookings} />
             )}
           </div>
         </React.Fragment>
@@ -124,11 +95,19 @@ class Booking extends Component {
 
 const mapStateToProps = state => {
   return {
-    token: state.auth.token
+    token: state.auth.token,
+    bookings: state.booking.bookings
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onfetchBookings: config => dispatch(actions.fetchBookings(config)),
+    onDeleteBooking: () => dispatch(actions.deleteBooking())
   };
 };
 
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(Booking);

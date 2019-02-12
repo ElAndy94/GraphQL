@@ -9,12 +9,14 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import events from './store/reducers/event';
 import auth from './store/reducers/auth';
+import bookings from './store/reducers/booking';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const rootReducer = combineReducers({
   events: events,
-  auth: auth
+  auth: auth,
+  booking: bookings,
 });
 
 const store = createStore(rootReducer, composeEnhancers(

@@ -7,3 +7,8 @@ export {
   authCheckState,
   logout
 } from './auth';
+
+export {
+  fetchBookings,
+  deleteBooking
+} from './booking';
