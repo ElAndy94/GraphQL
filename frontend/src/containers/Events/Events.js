@@ -13,7 +13,6 @@ import "./Events.css";
 class Events extends Component {
   state = {
     creating: false,
-    events: [],
     isLoading: false,
     selectedEvent: null
   };
@@ -30,9 +29,6 @@ class Events extends Component {
   
   componentDidMount() {
     this.props.fetchEvents();
-    setTimeout(() => {
-      this.setState({ events: this.props.events });
-    }, 350);
   }
 
   startCreateEventHandler = () => {
@@ -55,54 +51,13 @@ class Events extends Component {
       return;
     }
 
-    // eslint-disable-next-line
     const event = { title, price, date, description };
     // ^ same   const event = {title: title, price: price, date: date, description: description};
 
-    const requestBody = {
-      query: `
-        mutation CreateEvent($title: String!, $desc: String!, $price: Float!, $date: String!){
-          createEvent(eventInput: {title: $title, description: $desc, price: $price, date: $date}) {
-            _id
-            title
-            description
-            date
-            price
-          }
-        }
-      `,
-      variables: {
-        title: title,
-        desc: description,
-        price: price,
-        date: date
-      }
-    };
-
-    const token = this.context.token;
+    const token = this.props.token;
     const config = { headers: { Authorization: "bearer " + token } };
 
-    axios
-      .post("http://localhost:8000/graphql", requestBody, config)
-      .then(res => {
-        this.setState(prevState => {
-          const updatedEvents = [...prevState.events];
-          updatedEvents.push({
-            _id: res.data.data.createEvent._id,
-            title: res.data.data.createEvent.title,
-            description: res.data.data.createEvent.description,
-            date: res.data.data.createEvent.date,
-            price: res.data.data.createEvent.price,
-            creator: {
-              _id: this.context.userId
-            }
-          });
-          return { events: updatedEvents };
-        });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    this.props.createEvent(event, config, this.props.events, this.props.userId);
   };
 
   modalCancelHandler = () => {
@@ -110,14 +65,14 @@ class Events extends Component {
   };
 
   showDetailHandler = eventId => {
-    this.setState(prevState => {
-      const selectedEvent = prevState.events.find(e => e._id === eventId);
+    // this.setState(prevState => {
+      const selectedEvent = this.props.events.find(e => e._id === eventId);
       return { selectedEvent: selectedEvent };
-    });
+    // });
   };
 
   bookEventHandler = () => {
-    if (!this.context.token) {
+    if (!this.props.isAuthenticated) {
       this.setState({ selectedEvent: null });
       return;
     }
@@ -136,7 +91,7 @@ class Events extends Component {
       }
     };
 
-    const token = this.context.token;
+    const token = this.props.token;
     const config = { headers: { Authorization: "bearer " + token } };
 
     axios
@@ -198,7 +153,7 @@ class Events extends Component {
             canConfirm
             onCancel={this.modalCancelHandler}
             onConfirm={this.bookEventHandler}
-            confirmText={this.context.token ? "Book" : "Confirm"}
+            confirmText={this.props.isAuthenticated ? "Book" : "Confirm"}
           >
             <h1>{this.state.selectedEvent.title}</h1>
             <h2>
@@ -208,7 +163,7 @@ class Events extends Component {
             <p>{this.state.selectedEvent.description}</p>
           </Modal>
         )}
-        {this.context.token && (
+        {this.props.isAuthenticated && (
           <div className="events-control">
             <p>Share your own Events!</p>
             <button className="btn" onClick={this.startCreateEventHandler}>
@@ -220,8 +175,8 @@ class Events extends Component {
           <Spinner />
         ) : (
           <EventList
-            events={this.state.events}
-            authUserId={this.context.userId}
+            events={this.props.events}
+            authUserId={this.props.userId}
             onViewDetail={this.showDetailHandler}
           />
         )}
@@ -231,12 +186,16 @@ class Events extends Component {
 }
 
 const mapStateToProps = state => ({
-  events: state.events.events
+  events: state.events.events,
+  userId: state.auth.userId,
+  isAuthenticated: state.auth.token !== null,
+  token: state.auth.token
 });
 
 const mapDispatchToProps = dispatch => {
   return {
     fetchEvents: () => dispatch( actions.fetchEvents() ),
+    createEvent: (event, config, events, userId) => dispatch( actions.createEvent(event, config, events, userId) )
   };
 };
 

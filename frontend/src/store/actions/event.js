@@ -56,22 +56,71 @@ export const fetchEvents = () => {
   };
 };
 
-// export const fetchEvents = () => dispatch => {
-//   console.log('hello');
-//   dispatch({
-//     type: actionTypes.FETCH_EVENTS,
-//     payload: events
-//   });
-// };
+export const createEventStart = () => {
+  return {
+    type: actionTypes.CREATE_EVENT_START
+  };
+};
 
-// export const createItem = itemData => dispatch => {
-//   const randomId = Math.floor(Math.random() * 1000);
-//   itemData.id = randomId;
-//   dispatch({
-//     type: actionTypes.NEW_ITEM,
-//     payload: itemData
-//   });
-// };
+export const createEventSuccess = updatedEvents => {
+  return {
+    type: actionTypes.CREATE_EVENT_SUCCESS,
+    events: updatedEvents
+  };
+};
+
+export const createEventFail = error => {
+  return {
+    type: actionTypes.CREATE_EVENT_FAIL,
+    error: error
+  };
+};
+
+export const createEvent = (event, config, events, userId) => {
+  return dispatch => {
+    dispatch(createEventStart());
+    const requestBody = {
+      query: `
+        mutation CreateEvent($title: String!, $desc: String!, $price: Float!, $date: String!){
+          createEvent(eventInput: {title: $title, description: $desc, price: $price, date: $date}) {
+            _id
+            title
+            description
+            date
+            price
+          }
+        }
+      `,
+      variables: {
+        title: event.title,
+        desc: event.description,
+        price: event.price,
+        date: event.date
+      }
+    };
+
+    axios
+      .post("http://localhost:8000/graphql", requestBody, config)
+      .then(res => {
+        const updatedEvents = [...events];
+        updatedEvents.push({
+          _id: res.data.data.createEvent._id,
+          title: res.data.data.createEvent.title,
+          description: res.data.data.createEvent.description,
+          date: res.data.data.createEvent.date,
+          price: res.data.data.createEvent.price,
+          creator: {
+            _id: userId
+          }
+        });
+        dispatch(createEventSuccess(updatedEvents));
+      })
+      .catch(err => {
+        console.log(err);
+        dispatch(createEventFail(err));
+      });
+  };
+};
 
 // export const deleteItem = (id, prevFiltered) => dispatch => {
 //   if (prevFiltered) {

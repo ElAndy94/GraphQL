@@ -1,5 +1,6 @@
 export {
   fetchEvents,
+  createEvent
 } from './event';
 
 export {
