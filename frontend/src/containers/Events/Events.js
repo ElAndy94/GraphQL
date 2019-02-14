@@ -13,7 +13,6 @@ import "./Events.css";
 class Events extends Component {
   state = {
     creating: false,
-    isLoading: false,
     selectedEvent: null
   };
   isActive = true;
@@ -65,10 +64,8 @@ class Events extends Component {
   };
 
   showDetailHandler = eventId => {
-    // this.setState(prevState => {
       const selectedEvent = this.props.events.find(e => e._id === eventId);
-      return { selectedEvent: selectedEvent };
-    // });
+      this.setState({ selectedEvent: selectedEvent });
   };
 
   bookEventHandler = () => {
@@ -171,7 +168,7 @@ class Events extends Component {
             </button>
           </div>
         )}
-        {this.state.isLoading ? (
+        {this.props.isLoading ? (
           <Spinner />
         ) : (
           <EventList
@@ -186,10 +183,11 @@ class Events extends Component {
 }
 
 const mapStateToProps = state => ({
+  isAuthenticated: state.auth.token !== null,
   events: state.events.events,
   userId: state.auth.userId,
-  isAuthenticated: state.auth.token !== null,
-  token: state.auth.token
+  token: state.auth.token,
+  isLoading: state.events.loading
 });
 
 const mapDispatchToProps = dispatch => {

@@ -103,6 +103,7 @@ export const createEvent = (event, config, events, userId) => {
       .post("http://localhost:8000/graphql", requestBody, config)
       .then(res => {
         const updatedEvents = [...events];
+        console.log(res.data.data.createEvent);
         updatedEvents.push({
           _id: res.data.data.createEvent._id,
           title: res.data.data.createEvent.title,

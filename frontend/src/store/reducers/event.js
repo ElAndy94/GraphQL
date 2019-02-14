@@ -22,7 +22,24 @@ const reducer = (state = initialState, action) => {
     case actionTypes.FETCH_EVENTS_FAIL:
       return {
         ...state,
+        loading: false
       };
+    case actionTypes.CREATE_EVENT_START:
+    return {
+      ...state,
+      loading: true
+    }
+    case actionTypes.CREATE_EVENT_SUCCESS:
+    return {
+      ...state,
+      events: action.events,
+      loading: false
+    }
+    case actionTypes.CREATE_EVENT_FAIL:
+    return {
+      ...state,
+      loading: false
+    }
     default:
       return state;
   }
