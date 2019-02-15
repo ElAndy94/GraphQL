@@ -72,6 +72,7 @@ class Events extends Component {
         const config = { headers: { Authorization: 'bearer ' + token } };
 
         this.props.bookEvent(this.state.selectedEvent._id, config);
+        this.setState({ selectedEvent: null });
     };
 
     // componentWillUnmount() {
