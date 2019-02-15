@@ -4,9 +4,9 @@
     "editor.dragAndDrop": true,
     "workbench.editor.enablePreview": true,
     "editor.lineHeight": 25,
-    "editor.lineNumbers": "off",
+    "editor.lineNumbers": "on",
     "editor.links": false,
-    "editor.fontSize": 15,
+    "editor.fontSize": 13,
     "editor.fontFamily": "Dank Mono",
     "editor.fontLigatures": true,
     "editor.fontWeight": "400",
@@ -17,7 +17,7 @@
     "editor.minimap.enabled": false,
     "editor.minimap.renderCharacters": true,
     "editor.multiCursorModifier": "ctrlCmd",
-    "editor.renderIndentGuides": false,
+    "editor.renderIndentGuides": true,
     "editor.tabCompletion": "on",
     "editor.tabSize": 4,
     "editor.wordWrap": "on",
@@ -53,7 +53,7 @@
                     "punctuation.definition.comment"
                 ],
                 "settings": {
-                    "fontStyle": "italic"
+                    // "fontStyle": "italic"
                 }
             }
         ]
@@ -85,5 +85,8 @@
         "**/Archive.zip": true,
         "**/lastDeploy.txt": true
     },
-    "terminal.integrated.fontSize": 14,
+    "terminal.integrated.fontSize": 12,
+    "prettier.printWidth": 120,
+    "prettier.singleQuote": true,
+    "prettier.tabWidth": 4,
 }

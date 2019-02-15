@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
-import * as actions from '../../store/actions/index';
+import * as actions from "../../store/actions/index";
 import "./Auth.css";
 
 class Auth extends Component {
@@ -62,7 +62,6 @@ class Auth extends Component {
         }
       };
     }
-
     this.props.onAuth(requestBody);
   };
 
@@ -90,8 +89,11 @@ class Auth extends Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onAuth: (requestBody) => dispatch( actions.auth(requestBody) ),
+    onAuth: requestBody => dispatch(actions.auth(requestBody))
   };
 };
 
-export default connect(null, mapDispatchToProps)(Auth);
+export default connect(
+  null,
+  mapDispatchToProps
+)(Auth);
