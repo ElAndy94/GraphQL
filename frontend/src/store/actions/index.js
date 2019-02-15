@@ -1,6 +1,7 @@
 export {
   fetchEvents,
-  createEvent
+  createEvent,
+  bookEvent
 } from './event';
 
 export {

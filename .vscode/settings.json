@@ -1,6 +1,89 @@
 {
-  "editor.tabSize": 2,
-  "workbench.fontAliasing": "auto",
-  "editor.fontFamily": "Dank Mono, 'Courier New', monospace",
-  "editor.fontSize": 13
+    "editor.cursorStyle": "line",
+    "editor.detectIndentation": false,
+    "editor.dragAndDrop": true,
+    "workbench.editor.enablePreview": true,
+    "editor.lineHeight": 25,
+    "editor.lineNumbers": "off",
+    "editor.links": false,
+    "editor.fontSize": 15,
+    "editor.fontFamily": "Dank Mono",
+    "editor.fontLigatures": true,
+    "editor.fontWeight": "400",
+    "editor.formatOnPaste": true,
+    "editor.formatOnType": true,
+    "editor.insertSpaces": true,
+    "editor.letterSpacing": 0.5,
+    "editor.minimap.enabled": false,
+    "editor.minimap.renderCharacters": true,
+    "editor.multiCursorModifier": "ctrlCmd",
+    "editor.renderIndentGuides": false,
+    "editor.tabCompletion": "on",
+    "editor.tabSize": 4,
+    "editor.wordWrap": "on",
+    "editor.tokenColorCustomizations": {
+        "textMateRules": [
+            {
+                "scope": [
+                    "storage.type",
+                    "storage.modifier",
+                    "support.function",
+                    "entity.name.function",
+                    "entity.name.method.js",
+                    "entity.other.attribute-name",
+                    "keyword.control",
+                    "Keyword",
+                    "Storage",
+                    "variable.parameter.js",
+                    "markup.quote",
+                    "markup.bold markup.italic",
+                    "markup.italic markup.bold",
+                    "markup.quote markup.bold",
+                    "markup.bold markup.italic string",
+                    "markup.italic markup.bold string",
+                    "markup.quote markup.bold string",
+                    "markup.italic",
+                    "source.js constant.other.object.key.js string.unquoted.label.js",
+                    "tag.decorator.js entity.name.tag.js",
+                    "tag.decorator.js punctuation.definition.tag.js",
+                    "text.html.basic entity.other.attribute-name.html",
+                    "text.html.basic entity.other.attribute-name",
+                    "variable.language",
+                    "comment",
+                    "punctuation.definition.comment"
+                ],
+                "settings": {
+                    "fontStyle": "italic"
+                }
+            }
+        ]
+    },
+    "emmet.includeLanguages": {
+        // "javascript": "javascriptreact"
+    },
+    "explorer.confirmDragAndDrop": false,
+    "explorer.openEditors.visible": 0,
+    "extensions.autoUpdate": true,
+    "files.associations": {
+        "*.sass": "sass",
+        "*.vue": "vue",
+        "*.js": "javascript",
+        "*.json": "jsonc"
+    },
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/*.css": {
+            "when": "$(basename).scss"
+        },
+        "**/*.js.map": {
+            "when": "$(basename)"
+        },
+        "**/Archive.zip": true,
+        "**/lastDeploy.txt": true
+    },
+    "terminal.integrated.fontSize": 14,
 }

@@ -64,21 +64,6 @@ class Auth extends Component {
     }
 
     this.props.onAuth(requestBody);
-
-    // axios
-    //   .post("http://localhost:8000/graphql", requestBody)
-    //   .then(res => {
-    //     if (res.data.data.login.token) {
-    //       this.context.login(
-    //         res.data.data.login.token,
-    //         res.data.data.login.userId,
-    //         res.data.data.login.tokenExpiration
-    //       );
-    //     }
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //   });
   };
 
   render() {

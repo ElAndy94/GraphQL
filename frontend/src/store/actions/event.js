@@ -103,7 +103,6 @@ export const createEvent = (event, config, events, userId) => {
       .post("http://localhost:8000/graphql", requestBody, config)
       .then(res => {
         const updatedEvents = [...events];
-        console.log(res.data.data.createEvent);
         updatedEvents.push({
           _id: res.data.data.createEvent._id,
           title: res.data.data.createEvent.title,
@@ -119,6 +118,56 @@ export const createEvent = (event, config, events, userId) => {
       .catch(err => {
         console.log(err);
         dispatch(createEventFail(err));
+      });
+  };
+};
+
+export const bookEventStart = () => {
+  return {
+    type: actionTypes.BOOK_EVENTS_START
+  };
+};
+
+export const bookEventSuccess = () => {
+  return {
+    type: actionTypes.BOOK_EVENTS_SUCCESS
+    // selectedEvent: selectedEvent
+  };
+};
+
+export const bookEventFail = error => {
+  return {
+    type: actionTypes.BOOK_EVENTS_FAIL,
+    error: error
+  };
+};
+
+export const bookEvent = (id, config) => {
+  return dispatch => {
+    dispatch(bookEventStart());
+    const requestBody = {
+      query: `
+      mutation BookEvent($id: ID!){
+        bookEvent(eventId: $id) {
+          _id
+          createdAt
+          updatedAt
+        }
+      }
+    `,
+      variables: {
+        id: id
+      }
+    };
+
+    axios
+      .post("http://localhost:8000/graphql", requestBody, config)
+      .then(res => {
+        dispatch(bookEventSuccess());
+      })
+      .catch(err => {
+        console.log(err);
+        dispatch(bookEventFail());
       });
   };
 };

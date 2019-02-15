@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import axios from "axios";
 import { connect } from 'react-redux';
 // import PropTypes from 'prop-types';
 
@@ -73,33 +72,11 @@ class Events extends Component {
       this.setState({ selectedEvent: null });
       return;
     }
-    const requestBody = {
-      query: `
-        mutation BookEvent($id: ID!){
-          bookEvent(eventId: $id) {
-            _id
-            createdAt
-            updatedAt
-          }
-        }
-      `,
-      variables: {
-        id: this.state.selectedEvent._id
-      }
-    };
 
     const token = this.props.token;
     const config = { headers: { Authorization: "bearer " + token } };
 
-    axios
-      .post("http://localhost:8000/graphql", requestBody, config)
-      .then(res => {
-        console.log(res.data);
-        this.setState({ selectedEvent: null });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    this.props.bookEvent(this.state.selectedEvent._id, config);
   };
 
   // componentWillUnmount() {
@@ -180,7 +157,7 @@ class Events extends Component {
       </React.Fragment>
     );
   }
-}
+};
 
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.token !== null,
@@ -193,7 +170,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => {
   return {
     fetchEvents: () => dispatch( actions.fetchEvents() ),
-    createEvent: (event, config, events, userId) => dispatch( actions.createEvent(event, config, events, userId) )
+    createEvent: (event, config, events, userId) => dispatch( actions.createEvent(event, config, events, userId) ),
+    bookEvent: (id, config) => dispatch( actions.bookEvent(id, config) )
   };
 };
 

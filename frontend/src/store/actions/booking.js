@@ -12,7 +12,6 @@ export const fetchStart = () => {
 
 export const getBookingsSuccess = bookings => {
   userBookings = bookings;
-  console.log(userBookings);
   return {
     type: actionTypes.FETCH_BOOKINGS_SUCCESS,
     bookings: bookings
