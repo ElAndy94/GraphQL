@@ -10,9 +10,10 @@ const eventItem = props => (
         £{props.price} - {new Date(props.date).toLocaleDateString()}
       </h2>
     </div>
-    <div>
+            
+        <div>
       {props.userId === props.creatorId ? (
-        <p>Your the owner of this event.</p>
+        <p>Your the creator of this event.</p>
       ) : (
         <button
           className="btn"
