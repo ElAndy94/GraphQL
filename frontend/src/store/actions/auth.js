@@ -18,7 +18,6 @@ export const authFail = error => {
 };
 
 export const logout = () => {
-    console.log('logout');
     localStorage.removeItem('token');
     localStorage.removeItem('expirationDate');
     localStorage.removeItem('userId');
@@ -36,8 +35,41 @@ export const checkAuthTimeout = expirationTime => {
     };
 };
 
-export const auth = requestBody => {
+export const auth = (email, password, isLogin) => {
     return dispatch => {
+        let requestBody = {
+            query: `
+                query Login($email: String!, $password: String!) {
+                    login(email: $email, password: $password) {
+                        userId
+                        token
+                        tokenExpiration
+                    }
+                }
+            `,
+            variables: {
+                email: email,
+                password: password
+            }
+        };
+
+        if (!isLogin) {
+            requestBody = {
+                query: `
+                mutation CreateUser($email: String!, $password: String!) {
+                    createUser(userInput: {email: $email, password: $password}) {
+                        _id
+                        email
+                    }
+                }
+                `,
+                variables: {
+                    email: email,
+                    password: password
+                }
+            };
+        }
+
         axios
             .post('http://localhost:8000/graphql', requestBody)
             .then(res => {
