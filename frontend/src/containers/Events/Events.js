@@ -14,7 +14,7 @@ class Events extends Component {
         creating: false,
         selectedEvent: null
     };
-    isActive = true;
+    // isActive = true;
 
     constructor(props) {
         super(props);

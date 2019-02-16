@@ -1,6 +1,8 @@
 import React from 'react';
 import { Bar as BarChart } from 'react-chartjs';
 
+import './BookingsChart.css';
+
 const BOOKINGS_BUCKETS = {
     Cheap: {
         min: 0,
@@ -44,8 +46,8 @@ const bookingsChart = props => {
         values[values.length - 1] = 0;
     }
     return (
-        <div style={{ textAlign: 'center' }}>
-            <BarChart data={chartData} />
+        <div className="chart">
+            <BarChart data={chartData} width={600} height={300}/>
         </div>
     );
 };
