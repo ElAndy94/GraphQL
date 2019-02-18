@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import * as actions from '../../store/actions/index';
@@ -47,7 +47,7 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(mainNavigation);
+)(mainNavigation));
