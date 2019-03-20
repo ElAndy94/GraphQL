@@ -1,5 +1,7 @@
 # The Graphql React Event Booking System!
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5a60b60345a14d7c829c50e76e2aa57e)](https://app.codacy.com/app/ElAndy94/GraphQL?utm_source=github.com&utm_medium=referral&utm_content=ElAndy94/GraphQL&utm_campaign=Badge_Grade_Dashboard)
+
 An application to manage event bookings.
 
 ## Getting Started
